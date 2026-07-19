@@ -127,17 +127,73 @@ public partial class GestureManager : Node
         _f3PressedLast = f3;
     }
 
+    private (string Executable, string Arguments) ResolvePythonCommand()
+    {
+        string[] candidates = new[]
+        {
+            System.Environment.GetEnvironmentVariable("PYTHON312"),
+            System.Environment.GetEnvironmentVariable("PYTHON"),
+            System.Environment.GetEnvironmentVariable("PYTHON3"),
+            "python3.12",
+            "python3.12.exe",
+            "py",
+            "python3",
+            "python"
+        };
+
+        foreach (var candidate in candidates)
+        {
+            if (string.IsNullOrWhiteSpace(candidate))
+                continue;
+
+            if (IsPython312Available(candidate))
+                return candidate.Equals("py", StringComparison.OrdinalIgnoreCase)
+                    ? (candidate, "-3.12 -u")
+                    : (candidate, "-u");
+        }
+
+        return ("python3.12", "-u");
+    }
+
+    private bool IsPython312Available(string command)
+    {
+        try
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = command,
+                Arguments = command.Equals("py", StringComparison.OrdinalIgnoreCase) ? "-3.12 --version" : "--version",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+            };
+
+            using var process = Process.Start(psi);
+            if (process == null)
+                return false;
+
+            string output = process.StandardOutput.ReadToEnd() + process.StandardError.ReadToEnd();
+            process.WaitForExit(2000);
+            return process.ExitCode == 0 && output.IndexOf("3.12", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     private void StartHandTrackerProcess()
     {
         try
         {
             // Start the Python hand tracker process using the specified script and Python executable.
             var scriptPath = ProjectSettings.GlobalizePath("res://player/HandTracking/HandTracker.py");
-            var pythonPath = "C:\\Users\\rz471\\AppData\\Local\\Programs\\Python\\Python312\\python.exe";
+            var pythonCommand = ResolvePythonCommand();
             var psi = new ProcessStartInfo
             {
-                FileName = pythonPath,
-                Arguments = $"-u \"{scriptPath}\"",
+                FileName = pythonCommand.Executable,
+                Arguments = $"{pythonCommand.Arguments} \"{scriptPath}\"",
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
