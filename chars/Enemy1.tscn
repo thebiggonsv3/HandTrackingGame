@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://b6jw768d6d7ap"]
+
+[ext_resource type="Script" path="C:/Users/rz471/Documents/test-1/chars/Enemy1.cs" id="1_ta114"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ta114"]
+radius = 20.0
+height = 60.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1b8jx"]
+
+[node name="Enemy1" type="CharacterBody2D" unique_id=2042503075]
+script = ExtResource("1_ta114")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1217162261]
+custom_minimum_size = Vector2(40, 60)
+offset_top = -60.0
+offset_right = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=414410770]
+position = Vector2(20, -30)
+shape = SubResource("CapsuleShape2D_ta114")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2124826748]
+sprite_frames = SubResource("SpriteFrames_1b8jx")
