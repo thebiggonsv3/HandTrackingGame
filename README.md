@@ -1,4 +1,5 @@
 NOTE: THIS GAME IS A WORK IN PROGRESS
+
 This is intended to be a platformer game using one's hands as the control. 
 
 1. Must be run in Python 3.12.
