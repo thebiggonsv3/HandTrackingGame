@@ -88,13 +88,13 @@ class HandDetector:
             if -45 <= angle <= 45:
                 cv2.putText(frame, "Pointing Right", (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,255,0), 2, cv2.LINE_AA)
                 return "right"
-            elif 45 < angle <= 70:
+            elif 45 < angle <= 75:
                 cv2.putText(frame, "Pointing Top-Right", (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,220,100), 2, cv2.LINE_AA)
                 return "top_right"
-            elif 70 < angle <= 110:
+            elif 75 < angle <= 105:
                 cv2.putText(frame, "Pointing Up", (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,255,180), 2, cv2.LINE_AA)
                 return "up"
-            elif 110 < angle <= 135:
+            elif 105 < angle <= 140:
                 cv2.putText(frame, "Pointing Top-Left", (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,180,220), 2, cv2.LINE_AA)
                 return "top_left"
             else:
